@@ -1,0 +1,110 @@
+$main-color: #1F92D1;
+$main-color-light: #6DB9E2;
+$main-color-dark: #055C8B;
+$second-color: #67996D;
+$second-color-light: #BFD4C2;
+$second-color-dark: #2B6532;
+$third-color: #FFC11A;
+$third-color-light: #FFD973;
+$third-color-dark: #DB9F00;
+$text-main: #2C3E50;
+$text-light: #FFFFFF;
+$bg-main: #E2D9F9;
+$bg-dark: #2C3E50;
+$error: #E8081F;
+$success: #009737;
+
+body {
+  background-color: $bg-main;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: $text-main;
+}
+
+h1 {
+}
+
+h2 {
+  text-align: justify;
+  border-bottom: 1px solid $second-color;
+}
+
+
+
+/* ** ENHANCED CHECK ** */
+.enhancedCheck.enhancedCheck-kng {
+  input[type="radio"], input[type="checkbox"] {
+    &:checked + label:before {
+      background: $main-color;
+      color: white;
+    }
+    &:not(:checked) + label:hover {
+      border: 1px solid $main-color;
+    }
+    &:checked:disabled + label:before {
+      background: $main-color-light;
+    }
+    &:not(:checked):disabled + label:hover {
+      border: 1px solid $main-color-light;
+    }
+  }
+}
+.enhancedCheck.enhancedCheck-kng-second {
+  input[type="radio"], input[type="checkbox"] {
+    &:checked + label:before {
+      background: $second-color;
+      color: white;
+    }
+    &:not(:checked) + label:hover {
+      border: 1px solid $second-color;
+    }
+    &:checked:disabled + label:before {
+      background: $second-color-light;
+    }
+    &:not(:checked):disabled + label:hover {
+      border: 1px solid $second-color-light;
+    }
+  }
+}
+.enhancedCheck.enhancedCheck-kng-third {
+  input[type="radio"], input[type="checkbox"] {
+    &:checked + label:before {
+      background: $third-color;
+      color: white;
+    }
+    &:not(:checked) + label:hover {
+      border-color: $third-color;
+    }
+    &:checked:disabled + label:before {
+      background: $third-color-light;
+    }
+    &:not(:checked):disabled + label:hover {
+      border: 1px solid $third-color-light;
+    }
+  }
+}
+.enhancedToggle.enhancedCheck-kng .enhancedToggle-label {
+  background: fuchsia;
+  color: white;
+}
+
+
+/* ** MIXINS ** */
+//transitions
+@mixin transition($transition) {
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -ms-transition: $transition;
+  -o-transition: $transition;
+  transition: $transition;
+}
+//transform
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
