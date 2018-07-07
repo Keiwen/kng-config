@@ -1,6 +1,8 @@
 # kng-config
 
-> A Vue.js project
+Feel free to try it: https://keiwen.github.io/kng-config/
+
+Web interface for name generation, using name generator engine project (https://github.com/Keiwen/kng-engine)
 
 ## Build Setup
 
