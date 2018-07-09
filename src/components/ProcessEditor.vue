@@ -151,7 +151,7 @@ export default {
       switch (this.item.type) {
         case 'WeightedList':
           return [
-            'Each entry should be defined with an associated weight (1 by default). Add \':\' after your entry to enter your weight (\'name:3\' for example)'
+            'Each entry should be defined with an associated weight. Add \':\' after your entry to enter your weight (\'name:3\' for example)'
           ]
         case 'CharGroup':
           return [
