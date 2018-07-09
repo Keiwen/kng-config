@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Homepage from '@/components/Homepage'
+import Import from '@/components/Import'
 import ProcessDoc from '@/components/ProcessDoc'
 import ProcessList from '@/components/ProcessList'
 import ComponentList from '@/components/ComponentList'
@@ -15,6 +16,11 @@ export default new Router({
       path: '/',
       name: 'Homepage',
       component: Homepage
+    },
+    {
+      path: '/import',
+      name: 'Import',
+      component: Import
     },
     {
       path: '/doc-process',

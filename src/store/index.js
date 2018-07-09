@@ -209,15 +209,41 @@ export default new Vuex.Store({
     },
     getEngineExport: (state, getters) => {
       return JSON.stringify(KngSerializer.serializeEngine(getters.getKngEngine), null, 4)
+    },
+    checkItemsToImport: (state) => (itemList, category, partItems) => {
+      if (typeof itemList !== 'object') throw new Error(category + ' not found')
+      let kngItems = {}
+      Object.keys(itemList).forEach(function (itemKey) {
+        let item = itemList[itemKey]
+        item._key = itemKey
+        let defaultItem = null
+        switch (category) {
+          case 'processes': defaultItem = state.defaultProcess; break
+          case 'components': defaultItem = state.defaultComponent; break
+          case 'compositions': defaultItem = state.defaultComposition; break
+          case 'origins': defaultItem = state.defaultOrigin; break
+          default: throw new Error('undefined category ' + category)
+        }
+        defaultItem = JSON.parse(JSON.stringify(defaultItem))
+        // attribute in default that are undefined in import will be added in import
+        if (category === 'processes') item.parameters = Object.assign(defaultItem.parameters, item.parameters)
+        item = Object.assign(defaultItem, item)
+        try {
+          switch (category) {
+            case 'processes': kngItems[itemKey] = KngSerializer.parseProcess(item, itemKey); break
+            case 'components': kngItems[itemKey] = KngSerializer.parseComponent(item, itemKey, partItems); break
+            case 'compositions': kngItems[itemKey] = KngSerializer.parseComposition(item, itemKey, partItems); break
+            case 'origins': kngItems[itemKey] = KngSerializer.parseOrigin(item, itemKey, partItems); break
+          }
+        } catch (exception) {
+          throw new Error('Error in ' + category + ', key ' + itemKey + ': ' + exception.message)
+        }
+        itemList[itemKey] = item
+      })
+      return kngItems
     }
   },
   actions: {
-    switchWildMode ({commit}) {
-      commit(types.ADD_PROCESS)
-    },
-    win ({dispatch}) {
-      dispatch('storeGame', true)
-    },
     validateProcess ({state, getters, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
       try {
@@ -296,10 +322,33 @@ export default new Vuex.Store({
       }
       commit(types.VALID_ENGINE)
     },
-    resetState () {
-      // call this.$store.dispatch('resetState') from a component action
-      localStorage.removeItem(persistOptions.key)
-      location.reload()
+    importEngine ({state, getters, dispatch, commit}, jsonEngine) {
+      commit(types.RESET_ENGINE)
+
+      if (typeof jsonEngine !== 'string') throw new Error('Engine to import must be a string')
+      let engineToImport = null
+      try {
+        engineToImport = JSON.parse(jsonEngine)
+      } catch (exception) {
+        throw new Error('Engine to import is not a valid JSON string')
+      }
+      let kngProcesses = getters.checkItemsToImport(engineToImport.processes, 'processes')
+      Object.keys(engineToImport.processes).forEach(function (processKey) {
+        commit(types.ADD_PROCESS, engineToImport.processes[processKey])
+      })
+      let kngComponents = getters.checkItemsToImport(engineToImport.components, 'components', kngProcesses)
+      Object.keys(engineToImport.components).forEach(function (componentKey) {
+        commit(types.ADD_COMPONENT, engineToImport.components[componentKey])
+      })
+      let kngCompositions = getters.checkItemsToImport(engineToImport.compositions, 'compositions', kngComponents)
+      Object.keys(engineToImport.compositions).forEach(function (compositionKey) {
+        commit(types.ADD_COMPOSITION, engineToImport.compositions[compositionKey])
+      })
+      getters.checkItemsToImport(engineToImport.origins, 'origins', kngCompositions)
+      Object.keys(engineToImport.origins).forEach(function (originKey) {
+        commit(types.ADD_ORIGIN, engineToImport.origins[originKey])
+      })
+      dispatch('validateEngine')
     }
   },
   mutations: {
@@ -385,6 +434,21 @@ export default new Vuex.Store({
     },
     [types.SET_ERROR_ENGINE] (state, msg) {
       state.engineErrorMsg = msg
+    },
+    [types.IMPORT_ENGINE] (state, importEngine) {
+      state.engine = importEngine
+      state.engineValid = false
+      state.engineErrorMsg = ''
+    },
+    [types.RESET_ENGINE] (state) {
+      state.engineValid = false
+      state.engineErrorMsg = ''
+      state.engine = {
+        processes: {},
+        components: {},
+        compositions: {},
+        origins: {}
+      }
     }
   },
   strict: debug,
