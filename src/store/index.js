@@ -52,6 +52,7 @@ export default new Vuex.Store({
     defaultProcess: {
       type: 'RawList',
       parameters: {
+        defaultWeight: 1,
         order: 1,
         minLength: 1,
         maxLength: -1,

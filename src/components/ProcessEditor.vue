@@ -162,6 +162,10 @@ export default {
     },
     specificParameters () {
       switch (this.item.type) {
+        case 'WeightedList':
+          return [
+            { name: 'defaultWeight', label: 'Default weight', type: 'number' }
+          ]
         case 'Markov':
           return [
             { name: 'minLength', label: 'Minimum length', type: 'number' },
@@ -221,7 +225,7 @@ export default {
           [entryToCheck, entryParam] = entryToCheck.split(':', 2)
           switch (processType) {
             case 'WeightedList':
-              if (isNaN(entryParam) || entryParam < 1) entryParam = 1
+              if (isNaN(entryParam) || entryParam < 1) entryParam = this.item.parameters.defaultWeight
               entryToCheck = [entryToCheck, Number(entryParam)]
               break
             case 'CharGroup':
