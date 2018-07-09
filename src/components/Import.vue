@@ -2,6 +2,8 @@
   <div class="engineImport container">
     <h1>Import configuration</h1>
 
+    <b-button @click="startNewEngine" variant="danger" class="cleanButton">Start a brand new engine</b-button>
+
     <b-card-group deck class="justify-content-center">
 
       <b-card>
@@ -36,6 +38,7 @@
 </template>
 
 <script>
+import * as storeMut from '@/store/mutation-types'
 import { mapActions } from 'vuex'
 
 export default {
@@ -65,10 +68,13 @@ export default {
         this.importStatus = 1
         this.importMessage = 'Configuration loaded and validated!'
       } catch (exception) {
-        console.log('received error in check', exception)
         this.importStatus = -1
         this.importMessage = exception.message
       }
+    },
+    startNewEngine () {
+      this.$store.commit(storeMut.RESET_ENGINE)
+      this.$router.push({name: 'ProcessList'})
     }
   }
 }
@@ -86,6 +92,10 @@ export default {
 
   #importEngine {
     margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .cleanButton {
     margin-bottom: 1rem;
   }
 
