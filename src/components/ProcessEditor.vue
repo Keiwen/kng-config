@@ -90,6 +90,7 @@
         </b-alert>
         <span v-else>{{ processGeneratedName }}</span>
       </div>
+        <p><i>TODO: auto build around single process</i></p>
     </div>
 
   </div>
