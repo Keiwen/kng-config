@@ -11,10 +11,12 @@ import Icon from 'vue-awesome/components/Icon'
 import 'hover.css/scss/hover.scss'
 // import VueAnalytics from 'vue-analytics'
 import 'vue-awesome/icons'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+Vue.use(VueClipboard)
 Vue.component('icon', Icon)
 // Vue.use(VueAnalytics, {
 //   id: 'toDefine',

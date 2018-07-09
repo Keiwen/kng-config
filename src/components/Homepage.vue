@@ -54,6 +54,25 @@
         </b-card>
       </b-card-group>
 
+      <b-button @click="exportEngine" variant="warning" class="exportButton">This configuration is great, I want to keep it!</b-button>
+      <sweet-modal ref="modalExportEngine" modal-theme="dark" title="Export editor" id="modalExportEngine">
+
+        <p>
+          Below are JSON data used for your configuration. You can copy this text and store it,
+          you'll just have to re-import it later to reload your configuration.
+        </p>
+        <b-button variant="secondary" id="clipboardCopyButton"
+                  v-clipboard:copy="getEngineExport"
+                  v-clipboard:success="onClipboardSuccess">
+          Copy to clipboard
+        </b-button>
+        <b-form-textarea id="exportEngine" disabled
+                         v-model="getEngineExport"
+                         :rows="6">
+        </b-form-textarea>
+
+      </sweet-modal>
+
     </div>
 
   </div>
@@ -62,23 +81,25 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import VSelect from 'vue-select'
+import { SweetModal } from 'sweet-modal-vue'
 
 export default {
   name: 'Homepage',
-  components: { VSelect },
+  components: { VSelect, SweetModal },
   data () {
     return {
       generatedName: null,
       generatedNameMultiple: [],
       generatedError: '',
-      forcedOrigin: null
+      forcedOrigin: null,
+      copiedClipboard: false
     }
   },
   mounted () {
     this.forcedOrigin = this.originsToForce[0]
   },
   computed: {
-    ...mapGetters(['engineValid', 'engineErrorMsg', 'hasEngineParts', 'generateNameFromOrigin', 'origins']),
+    ...mapGetters(['engineValid', 'engineErrorMsg', 'hasEngineParts', 'generateNameFromOrigin', 'origins', 'getEngineExport']),
     validityButton () {
       let buttonData = {
         variant: 'secondary',
@@ -148,6 +169,12 @@ export default {
         this.generatedError = errorCount + ' errors. Last one is: ' + this.generatedError
       }
       this.generatedName = ''
+    },
+    exportEngine () {
+      this.$refs.modalExportEngine.open()
+    },
+    onClipboardSuccess () {
+      this.copiedClipboard = true
     }
   }
 }
@@ -168,5 +195,17 @@ export default {
         margin-bottom: 2rem;
       }
     }
+  }
+
+  #clipboardCopyButton {
+    margin-bottom: 0.5rem;
+  }
+
+  #modalExportEngine .sweet-modal {
+    max-height: 90%;
+  }
+
+  .exportButton {
+    margin-top: 0.5rem;
   }
 </style>

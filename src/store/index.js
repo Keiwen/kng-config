@@ -206,6 +206,9 @@ export default new Vuex.Store({
     },
     generateNameFromOrigin: (state, getters) => (originKey, plain) => {
       return getters.getKngEngine.generateNameFromOrigin(originKey, plain)
+    },
+    getEngineExport: (state, getters) => {
+      return JSON.stringify(KngSerializer.serializeEngine(getters.getKngEngine), null, 4)
     }
   },
   actions: {

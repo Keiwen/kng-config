@@ -1,6 +1,6 @@
 {
   "name": "kng-config",
-  "version": "0.19.1",
+  "version": "0.20.0",
   "description": "Keiwen Name Generator Configurator - Web interface for name generator",
   "author": "Keiwen <keiwen.mk@gmail.com>",
   "private": true,
@@ -20,6 +20,7 @@
     "vue": "^2.5.2",
     "vue-analytics": "^4.1.3",
     "vue-awesome": "^2.3.5",
+    "vue-clipboard2": "^0.2.0",
     "vue-enhanced-check": "^1.5.3",
     "vue-router": "^3.0.1",
     "vue-select": "^2.4.0",

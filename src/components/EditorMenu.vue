@@ -152,11 +152,6 @@ export default {
         }
     }
 
-    .sweet-modal .sweet-title > h2 {
-        padding-top: 1.2rem !important;
-        border-bottom: none;
-    }
-
     .sweet-buttons button {
         margin-left: 2rem;
     }

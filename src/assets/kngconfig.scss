@@ -31,6 +31,10 @@ h2 {
   border-bottom: 1px solid $second-color;
 }
 
+.sweet-modal .sweet-title > h2 {
+  padding-top: 1.2rem !important;
+  border-bottom: none;
+}
 
 
 /* ** ENHANCED CHECK ** */
