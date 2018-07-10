@@ -187,7 +187,7 @@ export default {
         {name: 'maxLength', description: 'Maximum length of generated name (-1 to ignore limit)', 'default': -1},
         {name: 'maxAttempts', description: 'How many attempts are allowed to generate a name matching requirements', 'default': 25},
         {name: 'allowDuplicates', description: 'Allow generated name to exactly match one of the entry', 'default': 'true'},
-        {name: 'setAllowSubDuplicates', description: 'Allow generated name to match a sub-part of one of the entry', 'default': 'true'}
+        {name: 'allowSubDuplicates', description: 'Allow generated name to match a sub-part of one of the entry', 'default': 'true'}
       ]
     }
   }
