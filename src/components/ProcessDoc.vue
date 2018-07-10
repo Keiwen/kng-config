@@ -52,7 +52,11 @@
                     </p>
                     <b-alert show variant="warning">
                       <icon name="exclamation-triangle"></icon>
-                      Each entry should be defined with an associated weight (1 by default).
+                      Weighted list allow 'defaultWeight' attribute to set default weight on entries (1 by default)
+                    </b-alert>
+                    <b-alert show variant="warning">
+                      <icon name="exclamation-triangle"></icon>
+                      Each entry should be defined with an associated weight, or default weight is used.
                     </b-alert>
                     <b-card-group deck class="justify-content-center">
                       <b-card no-body header="Entries sample">
