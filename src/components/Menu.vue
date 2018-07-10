@@ -24,8 +24,9 @@
                         <b-dropdown-item>...</b-dropdown-item>
                     </b-nav-item-dropdown>
                     <b-nav-item-dropdown text="Documentation" right>
-                        <b-dropdown-item>Tutorial (...)</b-dropdown-item>
+                        <b-dropdown-item :to="{ name: 'MainDoc' }">Main doc</b-dropdown-item>
                         <b-dropdown-item :to="{ name: 'DocProcess' }">Processes</b-dropdown-item>
+                        <b-dropdown-item :to="{ name: 'Tutorial' }">Tutorial</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
