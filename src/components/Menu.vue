@@ -4,7 +4,7 @@
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-nav-text class="version">v0.21</b-nav-text>
+            <b-nav-text class="version">v0.23</b-nav-text>
             <router-link :to="{ name: 'Homepage' }" class="navbar-brand">KNG Configurator<br/></router-link>
             <b-navbar-nav>
                 <b-nav-item :to="{ name: 'Import' }" class="hvr-underline-from-center" right>Import</b-nav-item>
