@@ -17,11 +17,7 @@
       </dd>
       <dt>Component:</dt>
       <dd>
-        represents a part of a full name (first name, last name, ...). It uses a process.
-      </dd>
-      <dt>Process:</dt>
-      <dd>
-        defines rules to generate a random name, based on entries given (the 'dictionary').
+        represents a part of a full name (first name, last name, ...). It uses a process, that defines rules to generate a random name, based on entries given (the 'dictionary').
         There are several types of processes, learn more in <router-link :to="{ name: 'DocProcess' }" >process documentation</router-link>.
       </dd>
     </dl>
@@ -42,8 +38,8 @@
     </p>
     <b-alert variant="info" show>
       <icon name="lightbulb-o"></icon>
-      I'm thinking from origin to process (global to detail),
-      but I will create from process to origin as global include detail.
+      I'm thinking from origin to component (global to detail),
+      but I will create from component to origin as global include detail.
     </b-alert>
     <p>
       Engine is ready, I need to validate it to use it. Now it will pick a random origin,

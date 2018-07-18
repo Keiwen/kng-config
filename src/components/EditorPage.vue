@@ -17,12 +17,9 @@
                   </b-alert>
               </div>
 
-              <process-editor v-if="category === 'processes'"
-                              v-model="pickedItem"
-                              @update-item="updateItem"></process-editor>
               <component-editor v-if="category === 'components'"
-                                v-model="pickedItem"
-                                @update-item="updateItem"></component-editor>
+                              v-model="pickedItem"
+                              @update-item="updateItem"></component-editor>
               <composition-editor v-if="category === 'compositions'"
                                   v-model="pickedItem"
                                   @update-item="updateItem"></composition-editor>
@@ -52,7 +49,6 @@
 
 <script>
 import * as storeMut from '@/store/mutation-types'
-import ProcessEditor from './ProcessEditor'
 import ComponentEditor from './ComponentEditor'
 import CompositionEditor from './CompositionEditor'
 import OriginEditor from './OriginEditor'
@@ -63,7 +59,7 @@ import { SweetModal } from 'sweet-modal-vue'
 
 export default {
   name: 'EditorPage',
-  components: { EditorMenu, ProcessEditor, ComponentEditor, CompositionEditor, OriginEditor, KngSerializer, SweetModal },
+  components: { EditorMenu, ComponentEditor, CompositionEditor, OriginEditor, KngSerializer, SweetModal },
   props: {
     items: {
       type: Object
@@ -80,7 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'defaultProcess', 'defaultComponent', 'defaultComposition', 'defaultOrigin',
+      'defaultComponent', 'defaultComponent', 'defaultComposition', 'defaultOrigin',
       'validity'
     ]),
     validityButton () {
@@ -119,13 +115,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['validateProcess', 'validateComponent', 'validateComposition', 'validateOrigin']),
+    ...mapActions(['validateComponent', 'validateComposition', 'validateOrigin']),
     updateItem (item) {
       if (item !== null) {
         switch (this.category) {
-          case 'processes':
-            this.$store.commit(storeMut.ADD_PROCESS, item)
-            break
           case 'components':
             this.$store.commit(storeMut.ADD_COMPONENT, item)
             break
@@ -144,9 +137,6 @@ export default {
       if (typeof this.items[itemKey] === 'undefined') {
         let item = null
         switch (this.category) {
-          case 'processes':
-            item = this.defaultProcess
-            break
           case 'components':
             item = this.defaultComponent
             break
@@ -171,9 +161,6 @@ export default {
     },
     validItem () {
       switch (this.category) {
-        case 'processes':
-          this.validateProcess(this.pickedItem._key)
-          break
         case 'components':
           this.validateComponent(this.pickedItem._key)
           break
@@ -192,9 +179,6 @@ export default {
     removeConfirmed () {
       this.$refs.modalConfirmRemove.close()
       switch (this.category) {
-        case 'processes':
-          this.$store.commit(storeMut.REMOVE_PROCESS, this.pickedItem._key)
-          break
         case 'components':
           this.$store.commit(storeMut.REMOVE_COMPONENT, this.pickedItem._key)
           break

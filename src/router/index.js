@@ -5,7 +5,6 @@ import Import from '@/components/Import'
 import ProcessDoc from '@/components/ProcessDoc'
 import MainDoc from '@/components/MainDoc'
 import Tutorial from '@/components/Tutorial'
-import ProcessList from '@/components/ProcessList'
 import ComponentList from '@/components/ComponentList'
 import CompositionList from '@/components/CompositionList'
 import OriginList from '@/components/OriginList'
@@ -41,12 +40,6 @@ export default new Router({
       name: 'Tutorial',
       meta: { docRoute: true },
       component: Tutorial
-    },
-    {
-      path: '/processes',
-      name: 'ProcessList',
-      meta: { buildRoute: true },
-      component: ProcessList
     },
     {
       path: '/components',

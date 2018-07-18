@@ -22,7 +22,6 @@ export default new Vuex.Store({
       OK: 1
     },
     engine: {
-      processes: {},
       components: {},
       compositions: {},
       origins: {}
@@ -49,7 +48,7 @@ export default new Vuex.Store({
         name: 'Markov'
       }
     ],
-    defaultProcess: {
+    defaultComponent: {
       type: 'RawList',
       parameters: {
         defaultWeight: 1,
@@ -61,10 +60,6 @@ export default new Vuex.Store({
         allowSubDuplicates: true
       },
       dictionary: []
-    },
-    defaultComponent: {
-      process: '',
-      _overProcess: ''
     },
     defaultComposition: {
       components: {},
@@ -83,18 +78,12 @@ export default new Vuex.Store({
     processTypes: state => state.processTypes,
     validity: state => state.VALIDITY,
     engine: state => state.engine,
-    processes: state => state.engine.processes,
     components: state => state.engine.components,
     compositions: state => state.engine.compositions,
     origins: state => state.engine.origins,
-    defaultProcess: state => state.defaultProcess,
     defaultComponent: state => state.defaultComponent,
     defaultComposition: state => state.defaultComposition,
     defaultOrigin: state => state.defaultOrigin,
-    process: state => (key) => {
-      if (typeof state.engine.processes[key] === 'undefined') return {}
-      return state.engine.processes[key]
-    },
     component: state => (key) => {
       if (typeof state.engine.components[key] === 'undefined') return {}
       return state.engine.components[key]
@@ -107,9 +96,6 @@ export default new Vuex.Store({
       if (typeof state.engine.origins[key] === 'undefined') return {}
       return state.engine.origins[key]
     },
-    processesCount: (state, getters) => {
-      return Object.keys(getters.processes).length
-    },
     componentsCount: (state, getters) => {
       return Object.keys(getters.components).length
     },
@@ -118,9 +104,6 @@ export default new Vuex.Store({
     },
     originsCount: (state, getters) => {
       return Object.keys(getters.origins).length
-    },
-    hasProcess: (state, getters) => {
-      return getters.processesCount > 0
     },
     hasComponent: (state, getters) => {
       return getters.componentsCount > 0
@@ -132,7 +115,7 @@ export default new Vuex.Store({
       return getters.originsCount > 0
     },
     hasEngineParts: (state, getters) => {
-      return getters.hasProcess && getters.hasComponent && getters.hasComposition && getters.hasOrigin
+      return getters.hasComponent && getters.hasComposition && getters.hasOrigin
     },
     getBuildStatus: (state) => (items) => {
       let status = { ok: 0, unknown: 0, error: 0, total: 0 }
@@ -154,22 +137,14 @@ export default new Vuex.Store({
     },
     getBuildStatuses: (state, getters) => {
       return {
-        processes: getters.getBuildStatus(getters.processes),
         components: getters.getBuildStatus(getters.components),
         compositions: getters.getBuildStatus(getters.compositions),
         origins: getters.getBuildStatus(getters.origins)
       }
     },
     getKngProcess: (state, getters) => (key) => {
-      if (typeof state.engine.processes[key] === 'undefined') throw new Error('Process ' + key + ' not defined')
-      return KngSerializer.parseProcess(state.engine.processes[key], key)
-    },
-    getKngComponent: (state, getters) => (key) => {
       if (typeof state.engine.components[key] === 'undefined') throw new Error('Component ' + key + ' not defined')
-      const component = state.engine.components[key]
-      let kngProcesses = {}
-      kngProcesses[component.process] = getters.getKngProcess(component.process)
-      return KngSerializer.parseComponent(state.engine.components[key], key, kngProcesses)
+      return KngSerializer.parseProcess(state.engine.components[key], key)
     },
     getKngComposition: (state, getters) => (key) => {
       if (typeof state.engine.compositions[key] === 'undefined') throw new Error('Composition ' + key + ' not defined')
@@ -177,7 +152,7 @@ export default new Vuex.Store({
       let kngComponents = {}
       Object.keys(composition.components).forEach(function (partKey) {
         let componentKey = composition.components[partKey]
-        kngComponents[componentKey] = getters.getKngComponent(componentKey)
+        kngComponents[componentKey] = getters.getKngProcess(componentKey)
       })
       return KngSerializer.parseComposition(state.engine.compositions[key], key, kngComponents)
     },
@@ -194,7 +169,7 @@ export default new Vuex.Store({
     getKngEngine: (state) => {
       // cannot keep kngEngine object directly in store. After mutation,
       // store go through JSON.Stringify (cause by persistance?)
-      // and throw error for cicular reference
+      // and throw error for circular reference
       // This is due to markov process as neighbors contains same objects
       return KngSerializer.parseEngine(state.engine)
     },
@@ -218,7 +193,6 @@ export default new Vuex.Store({
         item._key = itemKey
         let defaultItem = null
         switch (category) {
-          case 'processes': defaultItem = state.defaultProcess; break
           case 'components': defaultItem = state.defaultComponent; break
           case 'compositions': defaultItem = state.defaultComposition; break
           case 'origins': defaultItem = state.defaultOrigin; break
@@ -226,12 +200,11 @@ export default new Vuex.Store({
         }
         defaultItem = JSON.parse(JSON.stringify(defaultItem))
         // attribute in default that are undefined in import will be added in import
-        if (category === 'processes') item.parameters = Object.assign(defaultItem.parameters, item.parameters)
+        if (category === 'components') item.parameters = Object.assign(defaultItem.parameters, item.parameters)
         item = Object.assign(defaultItem, item)
         try {
           switch (category) {
-            case 'processes': kngItems[itemKey] = KngSerializer.parseProcess(item, itemKey); break
-            case 'components': kngItems[itemKey] = KngSerializer.parseComponent(item, itemKey, partItems); break
+            case 'components': kngItems[itemKey] = KngSerializer.parseProcess(item, itemKey); break
             case 'compositions': kngItems[itemKey] = KngSerializer.parseComposition(item, itemKey, partItems); break
             case 'origins': kngItems[itemKey] = KngSerializer.parseOrigin(item, itemKey, partItems); break
           }
@@ -244,35 +217,17 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    validateProcess ({state, getters, commit}, key) {
+    validateComponent ({state, getters, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
       try {
         let kngProcess = getters.getKngProcess(key)
         kngProcess.checkReadyForGeneration()
-        commit(types.VALID_PROCESS, validPayload)
-      } catch (exception) {
-        validPayload.validity = state.VALIDITY.ERROR
-        validPayload.error = exception.message
-        commit(types.VALID_PROCESS, validPayload)
-      }
-    },
-    validateComponent ({state, getters, dispatch, commit}, key) {
-      let validPayload = getters.getValidatedPayload(key)
-      let subProcesses = []
-      subProcesses.push(getters.component(key).process)
-      subProcesses.forEach(function (processKey) {
-        dispatch('validateProcess', processKey)
-      })
-      try {
-        let kngComponent = getters.getKngComponent(key)
-        kngComponent.isValid()
+        commit(types.VALID_COMPONENT, validPayload)
       } catch (exception) {
         validPayload.validity = state.VALIDITY.ERROR
         validPayload.error = exception.message
         commit(types.VALID_COMPONENT, validPayload)
-        return
       }
-      commit(types.VALID_COMPONENT, validPayload)
     },
     validateComposition ({state, getters, dispatch, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
@@ -332,15 +287,11 @@ export default new Vuex.Store({
       } catch (exception) {
         throw new Error('Engine to import is not a valid JSON string')
       }
-      let kngProcesses = getters.checkItemsToImport(engineToImport.processes, 'processes')
-      Object.keys(engineToImport.processes).forEach(function (processKey) {
-        commit(types.ADD_PROCESS, engineToImport.processes[processKey])
+      let kngProcesses = getters.checkItemsToImport(engineToImport.components, 'components')
+      Object.keys(engineToImport.components).forEach(function (processKey) {
+        commit(types.ADD_COMPONENT, engineToImport.components[processKey])
       })
-      let kngComponents = getters.checkItemsToImport(engineToImport.components, 'components', kngProcesses)
-      Object.keys(engineToImport.components).forEach(function (componentKey) {
-        commit(types.ADD_COMPONENT, engineToImport.components[componentKey])
-      })
-      let kngCompositions = getters.checkItemsToImport(engineToImport.compositions, 'compositions', kngComponents)
+      let kngCompositions = getters.checkItemsToImport(engineToImport.compositions, 'compositions', kngProcesses)
       Object.keys(engineToImport.compositions).forEach(function (compositionKey) {
         commit(types.ADD_COMPOSITION, engineToImport.compositions[compositionKey])
       })
@@ -352,21 +303,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    [types.ADD_PROCESS] (state, process) {
+    [types.ADD_COMPONENT] (state, process) {
       if (typeof process._key === 'undefined') process._key = ''
       process._validity = state.VALIDITY.UNKNOWN
       process._validityError = ''
       const processCreation = JSON.parse(JSON.stringify(process))
-      Vue.set(state.engine.processes, processCreation._key, processCreation)
-      state.engineValid = false
-      state.engineErrorMsg = ''
-    },
-    [types.ADD_COMPONENT] (state, component) {
-      if (typeof component._key === 'undefined') component._key = ''
-      component._validity = state.VALIDITY.UNKNOWN
-      component._validityError = ''
-      const componentCreation = JSON.parse(JSON.stringify(component))
-      Vue.set(state.engine.components, componentCreation._key, componentCreation)
+      Vue.set(state.engine.components, processCreation._key, processCreation)
       state.engineValid = false
       state.engineErrorMsg = ''
     },
@@ -388,11 +330,6 @@ export default new Vuex.Store({
       state.engineValid = false
       state.engineErrorMsg = ''
     },
-    [types.REMOVE_PROCESS] (state, key) {
-      Vue.delete(state.engine.processes, key)
-      state.engineValid = false
-      state.engineErrorMsg = ''
-    },
     [types.REMOVE_COMPONENT] (state, key) {
       Vue.delete(state.engine.components, key)
       state.engineValid = false
@@ -407,11 +344,6 @@ export default new Vuex.Store({
       Vue.delete(state.engine.origins, key)
       state.engineValid = false
       state.engineErrorMsg = ''
-    },
-    [types.VALID_PROCESS] (state, payload) {
-      if (typeof state.engine.processes[payload.key] === 'undefined') return
-      state.engine.processes[payload.key]._validity = payload.validity
-      state.engine.processes[payload.key]._validityError = payload.error
     },
     [types.VALID_COMPONENT] (state, payload) {
       if (typeof state.engine.components[payload.key] === 'undefined') return
@@ -444,7 +376,6 @@ export default new Vuex.Store({
       state.engineValid = false
       state.engineErrorMsg = ''
       state.engine = {
-        processes: {},
         components: {},
         compositions: {},
         origins: {}

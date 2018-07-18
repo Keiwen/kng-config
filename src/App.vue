@@ -2,16 +2,13 @@
   <div id="app">
     <kng-config-menu></kng-config-menu>
     <div class="row buildProgress" v-if="showBuildProgress">
-      <div class="col-sm-3 buildProgressPart" @click="clickProcess">
-        <build-status :buildStatus="getBuildStatuses.processes"></build-status>
-      </div>
-      <div class="col-sm-3 buildProgressPart" @click="clickComponent">
+      <div class="col-sm-4 buildProgressPart" @click="clickProcess">
         <build-status :buildStatus="getBuildStatuses.components"></build-status>
       </div>
-      <div class="col-sm-3 buildProgressPart" @click="clickComposition">
+      <div class="col-sm-4 buildProgressPart" @click="clickComposition">
         <build-status :buildStatus="getBuildStatuses.compositions"></build-status>
       </div>
-      <div class="col-sm-3 buildProgressPart" @click="clickOrigin">
+      <div class="col-sm-4 buildProgressPart" @click="clickOrigin">
         <build-status :buildStatus="getBuildStatuses.origins"></build-status>
       </div>
     </div>
@@ -23,7 +20,7 @@
 import { mapGetters } from 'vuex'
 import KngConfigMenu from '@/components/Menu'
 import BuildStatus from '@/components/BuildStatus'
-import { RawListKngProcess, KngNameComponent, KngNameComposition, KngOrigin, KngEngine, KngSerializer } from 'kng-engine'
+import { RawListKngProcess, KngNameComposition, KngOrigin, KngEngine, KngSerializer } from 'kng-engine'
 
 export default {
   name: 'App',
@@ -34,18 +31,14 @@ export default {
       return (this.$route.meta && this.$route.meta.buildRoute)
     },
     generatedName () {
-      let fnfProcess = new RawListKngProcess('fnf')
-      fnfProcess.addListToDictionary(['Pierre', 'Nicolas', 'Jean'])
-      let lnfProcess = new RawListKngProcess('lnf')
-      lnfProcess.addListToDictionary(['Duchemin', 'Delacour', 'Desjardins'])
-      let fneProcess = new RawListKngProcess('fne')
-      fneProcess.addListToDictionary(['Michael', 'Andrew', 'Ryan'])
-      let lneProcess = new RawListKngProcess('lne')
-      lneProcess.addListToDictionary(['Smith', 'Jones', 'Williams'])
-      let fnfComponent = new KngNameComponent('fnf', fnfProcess)
-      let lnfComponent = new KngNameComponent('lnf', lnfProcess)
-      let fneComponent = new KngNameComponent('fne', fneProcess)
-      let lneComponent = new KngNameComponent('lne', lneProcess)
+      let fnfComponent = new RawListKngProcess('fnf')
+      fnfComponent.addListToDictionary(['Pierre', 'Nicolas', 'Jean'])
+      let lnfComponent = new RawListKngProcess('lnf')
+      lnfComponent.addListToDictionary(['Duchemin', 'Delacour', 'Desjardins'])
+      let fneComponent = new RawListKngProcess('fne')
+      fneComponent.addListToDictionary(['Michael', 'Andrew', 'Ryan'])
+      let lneComponent = new RawListKngProcess('lne')
+      lneComponent.addListToDictionary(['Smith', 'Jones', 'Williams'])
       let frfrComposition = new KngNameComposition('frfr', ['first', 'last'])
       frfrComposition.addNameComponent(fnfComponent, 'first')
       frfrComposition.addNameComponent(lnfComponent, 'last')
@@ -73,18 +66,15 @@ export default {
       // console.log('serialComposition', KngSerializer.jsonEncode(KngSerializer.serializeComposition(frfrComposition)))
       // console.log('serialOrigin', KngSerializer.jsonEncode(KngSerializer.serializeOrigin(frOrigin)))
       // console.log('serialEngine', KngSerializer.jsonEncode(KngSerializer.serializeEngine(engine)))
-      let importEngine = KngSerializer.parseEngine(KngSerializer.jsonDecode('{  "processes": {    "fnf": {      "type": "RawList",      "parameters": {},      "dictionary": [        "Pierre",        "Nicolas",        "Jean"      ]    },    "lnf": {      "type": "RawList",      "parameters": {},      "dictionary": [        "Duchemin",        "Delacour",        "Desjardins"      ]    },    "fne": {      "type": "RawList",      "parameters": {},      "dictionary": [        "Michael",        "Andrew",        "Ryan"      ]    },    "lne": {      "type": "RawList",      "parameters": {},      "dictionary": [        "Smith",        "Jones",        "Williams"      ]    }  },  "components": {    "fnf": {"process": "fnf"},    "lnf": {"process": "lnf"},    "fne": {"process": "fne"},    "lne": {"process": "lne"}  },  "compositions": {    "frfr": {      "pattern": [        "first",        "last"      ],      "components": {        "first": "fnf",        "last": "lnf"      }    },    "fren": {      "pattern": [        "first",        "last"      ],      "components": {        "first": "fne",        "last": "lnf"      }    },    "enen": {      "pattern": [        "first",        "last"      ],      "components": {        "first": "fne",        "last": "lne"      }    },    "enfr": {      "pattern": [        "first",        "last"      ],      "components": {        "first": "fnf",        "last": "lne"      }    }  },  "origins": {    "fr": {      "weight": 2,      "compositions": {        "fr": {          "composition": "frfr",          "weight": 9        },        "en": {          "composition": "fren",          "weight": 1        }      }    },    "usa": {      "weight": 1,      "compositions": {        "en": {          "composition": "enen",          "weight": 9        },        "fr": {          "composition": "enfr",          "weight": 1        }      }    }  }}'))
-      console.log('parseEngine', importEngine)
-      console.log('serialEngine', KngSerializer.jsonEncode(KngSerializer.serializeEngine(importEngine)))
+      let importEngine = KngSerializer.parseEngine(KngSerializer.jsonDecode('{"processes":{"fnf":{"type":"RawList","parameters":{},"dictionary":["Pierre","Nicolas","Jean"]},"lnf":{"type":"RawList","parameters":{},"dictionary":["Duchemin","Delacour","Desjardins"]},"fne":{"type":"RawList","parameters":{},"dictionary":["Michael","Andrew","Ryan"]},"lne":{"type":"RawList","parameters":{},"dictionary":["Smith","Jones","Williams"]}},"compositions":{"frfr":{"pattern":["first","last"],"components":{"first":"fnf","last":"lnf"}},"fren":{"pattern":["first","last"],"components":{"first":"fne","last":"lnf"}},"enen":{"pattern":["first","last"],"components":{"first":"fne","last":"lne"}},"enfr":{"pattern":["first","last"],"components":{"first":"fnf","last":"lne"}}},"origins":{"fr":{"weight":2,"compositions":{"fr":{"composition":"frfr","weight":9},"en":{"composition":"fren","weight":1}}},"usa":{"weight":1,"compositions":{"en":{"composition":"enen","weight":9},"fr":{"composition":"enfr","weight":1}}}}}'))
+      // console.log('parseEngine', importEngine)
+      // console.log('serialEngine rebuilt', KngSerializer.jsonEncode(KngSerializer.serializeEngine(importEngine)))
       return importEngine.generateName()
     }
   },
   methods: {
     clickProcess () {
       this.$router.push({name: 'ProcessList'})
-    },
-    clickComponent () {
-      this.$router.push({name: 'ComponentList'})
     },
     clickComposition () {
       this.$router.push({name: 'CompositionList'})

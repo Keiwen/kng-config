@@ -13,7 +13,6 @@
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
-                    <b-nav-item :to="{ name: 'ProcessList' }" class="hvr-underline-from-center">Processes</b-nav-item>
                     <b-nav-item :to="{ name: 'ComponentList' }" class="hvr-underline-from-center">Components</b-nav-item>
                     <b-nav-item :to="{ name: 'CompositionList' }" class="hvr-underline-from-center">Compositions</b-nav-item>
                     <b-nav-item :to="{ name: 'OriginList' }" class="hvr-underline-from-center">Origins</b-nav-item>
