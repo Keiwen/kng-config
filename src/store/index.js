@@ -300,6 +300,17 @@ export default new Vuex.Store({
         commit(types.ADD_ORIGIN, engineToImport.origins[originKey])
       })
       dispatch('validateEngine')
+    },
+    loadPresetConfig ({state, getters, dispatch, commit}, filename) {
+      console.log('Loading preset configuration: ' + filename)
+      let jsonEngine = ''
+      try {
+        jsonEngine = require('../../static/config/' + filename + '.json')
+        jsonEngine = JSON.stringify(jsonEngine)
+      } catch (exception) {
+        throw new Error('Configuration not found')
+      }
+      dispatch('importEngine', jsonEngine)
     }
   },
   mutations: {
