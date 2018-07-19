@@ -74,7 +74,7 @@ export default {
     },
     startNewEngine () {
       this.$store.commit(storeMut.RESET_ENGINE)
-      this.$router.push({name: 'ProcessList'})
+      this.$router.push({name: 'ComponentList'})
     }
   }
 }
