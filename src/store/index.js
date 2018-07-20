@@ -219,6 +219,12 @@ export default new Vuex.Store({
   actions: {
     validateComponent ({state, getters, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
+      if (typeof getters.component(key)._key === 'undefined') {
+        validPayload.validity = state.VALIDITY.ERROR
+        validPayload.error = 'Component ' + key + 'not found'
+        commit(types.VALID_COMPOSITION, validPayload)
+        return
+      }
       try {
         let kngProcess = getters.getKngProcess(key)
         kngProcess.checkReadyForGeneration()
@@ -231,6 +237,12 @@ export default new Vuex.Store({
     },
     validateComposition ({state, getters, dispatch, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
+      if (typeof getters.composition(key)._key === 'undefined') {
+        validPayload.validity = state.VALIDITY.ERROR
+        validPayload.error = 'Composition ' + key + 'not found'
+        commit(types.VALID_COMPOSITION, validPayload)
+        return
+      }
       let subComponents = getters.composition(key).components
       Object.keys(subComponents).forEach(function (partKey) {
         dispatch('validateComponent', subComponents[partKey])
@@ -248,6 +260,12 @@ export default new Vuex.Store({
     },
     validateOrigin ({state, getters, dispatch, commit}, key) {
       let validPayload = getters.getValidatedPayload(key)
+      if (typeof getters.origin(key)._key === 'undefined') {
+        validPayload.validity = state.VALIDITY.ERROR
+        validPayload.error = 'Origin ' + key + 'not found'
+        commit(types.VALID_COMPOSITION, validPayload)
+        return
+      }
       let subCompositions = getters.origin(key).compositions
       Object.keys(subCompositions).forEach(function (partKey) {
         dispatch('validateComposition', subCompositions[partKey].composition)
