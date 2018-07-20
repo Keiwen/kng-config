@@ -1,6 +1,6 @@
 {
   "name": "kng-config",
-  "version": "0.24.0",
+  "version": "0.24.1",
   "description": "Keiwen Name Generator Configurator - Web interface for name generator",
   "author": "Keiwen <keiwen.mk@gmail.com>",
   "private": true,
@@ -15,7 +15,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
     "hover.css": "^2.3.2",
-    "kng-engine": "^1.1.0",
+    "kng-engine": "^1.1.1",
     "sweet-modal-vue": "^2.0.0",
     "vue": "^2.5.2",
     "vue-analytics": "^4.1.3",
