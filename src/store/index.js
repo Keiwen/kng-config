@@ -302,6 +302,7 @@ export default new Vuex.Store({
       dispatch('validateEngine')
     },
     loadPresetConfig ({state, getters, dispatch, commit}, filename) {
+      // this console.log is put on purpose ;)
       console.log('Loading preset configuration: ' + filename)
       let jsonEngine = ''
       try {
