@@ -156,7 +156,7 @@ export default {
           ]
         case 'CharGroup':
           return [
-            'Each entry must be defined with an associated key. Add \':\' after your entry to enter your weight (\'a:a\' for example)'
+            'Each entry must be defined with an associated key. Add \':\' after your entry to enter your key (\'a:a\' for example)'
           ]
       }
       return []
