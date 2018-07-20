@@ -90,14 +90,25 @@
         </b-alert>
         <span v-else>{{ processGeneratedName }}</span>
       </div>
-        <p><i>TODO: auto build around single component</i></p>
     </div>
 
+    <div class="row processBuild">
+        <div class="container">
+            <b-button variant="warning" :disabled="!canBuildAround"
+                      @click="buildAround()">Auto build from this component</b-button>
+        </div>
+        <div class="container">
+            <b-alert show variant="danger" v-if="componentBuildError">
+                <icon name="times-circle"></icon>
+                {{ componentBuildError }}
+            </b-alert>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { EnhancedCheck, EnhancedToggle } from 'vue-enhanced-check'
 
 export default {
@@ -115,7 +126,8 @@ export default {
     return {
       dictionaryText: '',
       processGeneratedName: '',
-      processGeneratedNameError: ''
+      processGeneratedNameError: '',
+      componentBuildError: ''
     }
   },
   watch: {
@@ -180,12 +192,16 @@ export default {
     },
     dictionarySize () {
       return this.item.dictionary.length
+    },
+    canBuildAround () {
+      return this.item._validity > 0
     }
   },
   mounted () {
     this.reloadItem()
   },
   methods: {
+    ...mapActions(['buildOriginWithSingleComponent', 'validateEngine']),
     reloadItem () {
       this.processGeneratedName = ''
       this.processGeneratedNameError = ''
@@ -246,13 +262,23 @@ export default {
       } catch (exception) {
         this.processGeneratedNameError = exception.message
       }
+    },
+    buildAround () {
+      this.componentBuildError = ''
+      try {
+        this.buildOriginWithSingleComponent(this.item._key)
+        this.validateEngine()
+        this.$router.push({name: 'Homepage'})
+      } catch (exception) {
+        this.componentBuildError = exception.message
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
-  .processTest {
+    .processTest,.processBuild {
     margin-top: 1rem;
     .alert {
       margin-bottom: 0;

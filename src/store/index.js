@@ -321,6 +321,28 @@ export default new Vuex.Store({
         throw new Error('Configuration not found')
       }
       dispatch('importEngine', jsonEngine)
+    },
+    buildOriginWithSingleComponent ({state, getters, commit}, componentKey) {
+      let composition = JSON.parse(JSON.stringify(getters.defaultComposition))
+      // find an unused key for composition. Use number and increment
+      let compositionKey = 1
+      while (typeof state.engine.compositions[compositionKey.toString()] !== 'undefined') {
+        compositionKey++
+      }
+      composition._key = compositionKey.toString()
+      composition.components['component'] = componentKey
+      composition.pattern.push('component')
+      commit(types.ADD_COMPOSITION, composition)
+
+      let origin = JSON.parse(JSON.stringify(getters.defaultOrigin))
+      // find an unused key for origin. Use number and increment
+      let originKey = 1
+      while (typeof state.engine.origins[originKey.toString()] !== 'undefined') {
+        originKey++
+      }
+      origin._key = originKey.toString()
+      origin.compositions['composition'] = {composition: compositionKey.toString(), weight: 1}
+      commit(types.ADD_ORIGIN, origin)
     }
   },
   mutations: {
