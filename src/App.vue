@@ -2,7 +2,7 @@
   <div id="app">
     <kng-config-menu></kng-config-menu>
     <div class="row buildProgress" v-if="showBuildProgress">
-      <div class="col-sm-4 buildProgressPart" @click="clickProcess">
+      <div class="col-sm-4 buildProgressPart" @click="clickComponent">
         <build-status :buildStatus="getBuildStatuses.components"></build-status>
       </div>
       <div class="col-sm-4 buildProgressPart" @click="clickComposition">
@@ -73,8 +73,8 @@ export default {
     }
   },
   methods: {
-    clickProcess () {
-      this.$router.push({name: 'ProcessList'})
+    clickComponent() {
+      this.$router.push({name: 'ComponentList'})
     },
     clickComposition () {
       this.$router.push({name: 'CompositionList'})
