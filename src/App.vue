@@ -73,7 +73,7 @@ export default {
     }
   },
   methods: {
-    clickComponent() {
+    clickComponent () {
       this.$router.push({name: 'ComponentList'})
     },
     clickComposition () {
