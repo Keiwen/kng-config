@@ -148,6 +148,8 @@ export default {
             break
         }
         if (item !== null) {
+          // clone default item to manipulate it, or it will change state directly
+          item = JSON.parse(JSON.stringify(item))
           item._key = itemKey
           this.updateItem(item)
         }

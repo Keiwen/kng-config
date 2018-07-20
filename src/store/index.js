@@ -81,9 +81,9 @@ export default new Vuex.Store({
     components: state => state.engine.components,
     compositions: state => state.engine.compositions,
     origins: state => state.engine.origins,
-    defaultComponent: state => JSON.parse(JSON.stringify(state.defaultComponent)),
-    defaultComposition: state => JSON.parse(JSON.stringify(state.defaultComposition)),
-    defaultOrigin: state => JSON.parse(JSON.stringify(state.defaultOrigin)),
+    defaultComponent: state => state.defaultComponent,
+    defaultComposition: state => state.defaultComposition,
+    defaultOrigin: state => state.defaultOrigin,
     component: state => (key) => {
       if (typeof state.engine.components[key] === 'undefined') return {}
       return state.engine.components[key]
