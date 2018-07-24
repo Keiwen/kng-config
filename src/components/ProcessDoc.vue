@@ -79,6 +79,13 @@
                       Sequence process aims to build a random value following a list of characters group.
                       It randomly picks a value among each entry.
                     </p>
+                    <b-alert show variant="warning">
+                      <icon name="exclamation-triangle"></icon>
+                      Each entry is a list of possible pick.
+                      Possible separators are ',', ';', or '/'.
+                      If no separator provided, all characters are considered as possible pick.
+                      For example, 'aeiouy' will pick a random vowel.
+                    </b-alert>
                     <b-card-group deck class="justify-content-center">
                       <b-card no-body header="Entries sample">
                         <div class="card-text">
@@ -113,13 +120,20 @@
                       Parameter 'pattern' is required. If multiple values provided,
                       a random one will be picked before generation.
                     </b-alert>
+                    <b-alert show variant="warning">
+                      <icon name="exclamation-triangle"></icon>
+                      Each entry is a list of possible pick.
+                      Possible separators are ',', ';', or '/'.
+                      If no separator provided, all characters are considered as possible pick.
+                      For example, 'aeiouy' will pick a random vowel.
+                    </b-alert>
                     <b-card-group deck class="justify-content-center">
                       <b-card no-body header="Entries">
-                        <ul><li>a <i>(key: a)</i></li><li>p / m <i>(key: b)</i></li></ul>
+                        <ul><li>b <i>(key: c)</i></li><li>ao <i>(key: v)</i></li></ul>
                       </b-card>
                       <b-card no-body header="Possible results">
-                        <span>With patterns 'ab' and 'a-b':</span>
-                        <ul><li>ap <i>(25 %)</i></li><li>am <i>(25%)</i></li><li>a-p <i>(25%)</i></li><li>a-m <i>(25%)</i></li></ul>
+                        <span>With patterns 'cvc' and 'c-v':</span>
+                        <ul><li>Bab <i>(25 %)</i></li><li>Bob <i>(25%)</i></li><li>B-a <i>(25%)</i></li><li>B-o <i>(25%)</i></li></ul>
                       </b-card>
                     </b-card-group>
                   </b-card-body>
