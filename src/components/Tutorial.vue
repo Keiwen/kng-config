@@ -98,7 +98,25 @@
     </p>
 
     <h2 id="tuto_fantasy">Fantasy case</h2>
-    <p><i>Incoming</i></p>
+    <p>
+      Let's create a new fantasy race. Let's supposed that:
+    </p>
+    <ul>
+      <li>They have names composed of family name first, individual name last</li>
+      <li>They use following consonants: bdfgjklmnprstv</li>
+      <li>They use following vowels: aeiou</li>
+      <li>They use following consonants for restricted cases: dklnrst</li>
+      <li>Family names are defined on 3 letters: consonant, vowel, restricted consonant</li>
+      <li>Individual names are defined on 5 letters: consonant, vowel, consonant, vowel, consonant</li>
+    </ul>
+    <p>
+      So I create a 'family_name' component with a sequence process,
+      and a 'individual_name' with a char group pattern process.
+      My composition will use family then individual names.
+      Finally, I create a single origin using this composition.
+    </p>
+
+    <b-button @click="loadTutoConfig('tuto_fantasy')" variant="primary" class="presetButton">Load sample configuration</b-button>
 
   </div>
 </template>
