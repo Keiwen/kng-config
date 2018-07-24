@@ -20,7 +20,7 @@
 
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item-dropdown text="Samples" right>
-                        <b-dropdown-item>...</b-dropdown-item>
+                        <b-dropdown-item :to="{ name: 'Sample_elite_stars' }">Elite stars</b-dropdown-item>
                     </b-nav-item-dropdown>
                     <b-nav-item-dropdown text="Documentation" right>
                         <b-dropdown-item :to="{ name: 'MainDoc' }">Main doc</b-dropdown-item>

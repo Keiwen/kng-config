@@ -8,6 +8,7 @@ import Tutorial from '@/components/Tutorial'
 import ComponentList from '@/components/ComponentList'
 import CompositionList from '@/components/CompositionList'
 import OriginList from '@/components/OriginList'
+import Samples from '@/components/Samples'
 
 Vue.use(Router)
 
@@ -58,6 +59,17 @@ export default new Router({
       name: 'OriginList',
       meta: { buildRoute: true },
       component: OriginList
+    },
+    {
+      path: '/samples_list',
+      name: 'Sample',
+      component: Samples
+    },
+    {
+      path: '/samples/elite_stars',
+      name: 'Sample_elite_stars',
+      meta: { sampleRoute: 'elite_stars' },
+      component: Samples
     }
   ]
 })

@@ -1,0 +1,78 @@
+{
+  "components": {
+    "starname": {
+      "type": "CharGroup",
+      "parameters": {
+        "defaultWeight": 1,
+        "order": 1,
+        "minLength": 1,
+        "maxLength": -1,
+        "maxAttempts": 25,
+        "allowDuplicates": true,
+        "allowSubDuplicates": true,
+        "pattern": "aaaa",
+        "uppercaseFirst": true
+      },
+      "dictionary": [
+        [
+          [
+            "",
+            "le",
+            "xe",
+            "ge",
+            "za",
+            "ce",
+            "bi",
+            "so",
+            "us",
+            "es",
+            "ar",
+            "ma",
+            "in",
+            "di",
+            "re",
+            "a",
+            "er",
+            "at",
+            "en",
+            "be",
+            "ra",
+            "la",
+            "ve",
+            "ti",
+            "ed",
+            "or",
+            "qu",
+            "an",
+            "te",
+            "is",
+            "ri",
+            "on"
+          ],
+          "a"
+        ]
+      ]
+    }
+  },
+  "compositions": {
+    "starname": {
+      "pattern": [
+        "Star"
+      ],
+      "components": {
+        "Star": "starname"
+      }
+    }
+  },
+  "origins": {
+    "elite_game": {
+      "weight": 1,
+      "compositions": {
+        "Star": {
+          "composition": "starname",
+          "weight": 1
+        }
+      }
+    }
+  }
+}
