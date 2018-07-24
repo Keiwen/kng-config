@@ -1,6 +1,6 @@
 {
   "name": "kng-config",
-  "version": "0.25.0",
+  "version": "0.27.0",
   "description": "Keiwen Name Generator Configurator - Web interface for name generator",
   "author": "Keiwen <keiwen.mk@gmail.com>",
   "private": true,

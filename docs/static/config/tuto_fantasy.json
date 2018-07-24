@@ -1,0 +1,119 @@
+{
+  "components": {
+    "family_name": {
+      "type": "Sequence",
+      "parameters": {
+        "defaultWeight": 1,
+        "order": 1,
+        "minLength": 1,
+        "maxLength": -1,
+        "maxAttempts": 25,
+        "allowDuplicates": true,
+        "allowSubDuplicates": true,
+        "uppercaseFirst": true
+      },
+      "dictionary": [
+        [
+          "b",
+          "d",
+          "f",
+          "g",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "p",
+          "r",
+          "s",
+          "t",
+          "v"
+        ],
+        [
+          "a",
+          "e",
+          "i",
+          "o",
+          "u"
+        ],
+        [
+          "d",
+          "k",
+          "l",
+          "n",
+          "r",
+          "s",
+          "t"
+        ]
+      ]
+    },
+    "individual_name": {
+      "type": "CharGroup",
+      "parameters": {
+        "defaultWeight": 1,
+        "order": 1,
+        "minLength": 1,
+        "maxLength": -1,
+        "maxAttempts": 25,
+        "allowDuplicates": true,
+        "allowSubDuplicates": true,
+        "pattern": "cvcvc",
+        "uppercaseFirst": true
+      },
+      "dictionary": [
+        [
+          [
+            "b",
+            "d",
+            "f",
+            "g",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "p",
+            "r",
+            "s",
+            "t",
+            "v"
+          ],
+          "c"
+        ],
+        [
+          [
+            "a",
+            "e",
+            "i",
+            "o",
+            "u"
+          ],
+          "v"
+        ]
+      ]
+    }
+  },
+  "compositions": {
+    "name": {
+      "pattern": [
+        "Family name",
+        "Individual name"
+      ],
+      "components": {
+        "Family name": "family_name",
+        "Individual name": "individual_name"
+      }
+    }
+  },
+  "origins": {
+    "Fantasy": {
+      "weight": 1,
+      "compositions": {
+        "Tuto race": {
+          "composition": "name",
+          "weight": 1
+        }
+      }
+    }
+  }
+}
