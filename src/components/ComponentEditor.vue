@@ -220,11 +220,17 @@ export default {
         this.item.dictionary.forEach(function (toString) {
           if (typeof toString !== 'string') {
             switch (processType) {
+              case 'Sequence':
+                // all char are separated, join in one line
+                toString = toString.join(',')
+                break
               case 'WeightedList':
                 cumulWeight += Number(toString[1])
+                toString = toString.join(':')
                 break
+              default:
+                toString = toString.join(':')
             }
-            toString = toString.join(':')
           }
           textBuild += toString + '\n'
         })
