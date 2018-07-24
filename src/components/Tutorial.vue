@@ -90,6 +90,12 @@
       However, portuguese names often use a nickname,
       so I may need to add this to the portuguese composition.
     </p>
+    <p>
+      Wait... What about girl names?
+      I can use the same last name list, but a different first name list.
+      I add another composition using female first names to my origin
+      and I can adjust weights if needed.
+    </p>
 
     <h2 id="tuto_fantasy">Fantasy case</h2>
     <p><i>Incoming</i></p>
