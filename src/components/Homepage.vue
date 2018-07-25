@@ -31,6 +31,23 @@
               </v-select>
             </b-form-group>
 
+            <b-form-group id="fg_forcedComposition"
+                          horizontal
+                          v-if="forcedOrigin.key"
+                          :label-cols="3"
+                          breakpoint="sm"
+                          label="Composition"
+                          label-for="fi_forcedComposition">
+              <v-select :options="compositionsToForce" label="title"
+                        id="fi_forcedComposition"
+                        v-model="forcedComposition">
+                <template slot="option" slot-scope="option">
+                  {{ option.title }}
+                  <span class="compositionForceWeight" v-if="option.weight">(weight {{ option.weight }})</span>
+                </template>
+              </v-select>
+            </b-form-group>
+
             <b-button @click="generate" variant="primary" class="generateButton">Generate detailed name</b-button>
             <b-button @click="generateMultiple" variant="primary" class="generateButton">Generate 10 names</b-button>
 
@@ -91,15 +108,21 @@ export default {
       generatedName: null,
       generatedNameMultiple: [],
       generatedError: '',
-      forcedOrigin: null,
+      forcedOrigin: { key: '', weight: 0, title: '[All origins]', compositions: [] },
+      forcedComposition: { key: '', weight: 0, title: '[All compositions]' },
       copiedClipboard: false
     }
   },
-  mounted () {
-    this.forcedOrigin = this.originsToForce[0]
+  watch: {
+    forcedOrigin () {
+      this.forcedComposition = { key: '', weight: 0, title: '[All compositions]' }
+    }
   },
   computed: {
-    ...mapGetters(['engineValid', 'engineErrorMsg', 'hasEngineParts', 'generateNameFromOrigin', 'origins', 'getEngineExport']),
+    ...mapGetters([
+      'engineValid', 'engineErrorMsg', 'hasEngineParts', 'generateNameFromComposition',
+      'origins', 'getEngineExport'
+    ]),
     validityButton () {
       let buttonData = {
         variant: 'secondary',
@@ -117,13 +140,27 @@ export default {
     },
     originsToForce () {
       let list = []
-      list.push({ key: '', weight: 0, title: '[All origins]' })
+      list.push({ key: '', weight: 0, title: '[All origins]', compositions: [] })
       const origins = this.origins
       Object.keys(origins).forEach(function (originKey) {
         list.push({
           key: originKey,
           title: originKey,
-          weight: origins[originKey].weight
+          weight: origins[originKey].weight,
+          compositions: origins[originKey].compositions
+        })
+      })
+      return list
+    },
+    compositionsToForce () {
+      let list = []
+      list.push({ key: '', weight: 0, title: '[All compositions]' })
+      const compositions = this.forcedOrigin.compositions
+      Object.keys(compositions).forEach(function (compositionKey) {
+        list.push({
+          key: compositionKey,
+          title: compositionKey,
+          weight: compositions[compositionKey].weight
         })
       })
       return list
@@ -143,8 +180,9 @@ export default {
     generate () {
       this.generatedError = ''
       const originKey = (this.forcedOrigin.key) ? this.forcedOrigin.key : ''
+      const compositionKey = (this.forcedComposition.key) ? this.forcedComposition.key : ''
       try {
-        this.generatedName = this.generateNameFromOrigin(originKey)
+        this.generatedName = this.generateNameFromComposition(compositionKey, originKey)
       } catch (exception) {
         this.generatedName = ''
         this.generatedError = exception.message
@@ -154,11 +192,12 @@ export default {
     generateMultiple () {
       this.generatedError = ''
       const originKey = (this.forcedOrigin.key) ? this.forcedOrigin.key : ''
+      const compositionKey = (this.forcedComposition.key) ? this.forcedComposition.key : ''
       this.generatedNameMultiple = []
       let errorCount = 0
       for (let i = 0; i < 10; i++) {
         try {
-          const plainName = this.generateNameFromOrigin(originKey, true)
+          const plainName = this.generateNameFromComposition(compositionKey, originKey, true)
           this.generatedNameMultiple.push(plainName)
         } catch (exception) {
           errorCount++
@@ -183,7 +222,7 @@ export default {
 <style lang="scss">
   @import '../assets/kngconfig.scss';
 
-  .originForceWeight {
+  .originForceWeight,.compositionForceWeight {
     font-style: italic;
   }
   .engineGeneration {

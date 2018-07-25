@@ -182,6 +182,9 @@ export default new Vuex.Store({
     generateNameFromOrigin: (state, getters) => (originKey, plain) => {
       return getters.getKngEngine.generateNameFromOrigin(originKey, plain)
     },
+    generateNameFromComposition: (state, getters) => (compositionKey, originKey, plain) => {
+      return getters.getKngEngine.generateNameFromComposition(compositionKey, originKey, plain)
+    },
     getEngineExport: (state, getters) => {
       return JSON.stringify(KngSerializer.serializeEngine(getters.getKngEngine), null, 4)
     },
