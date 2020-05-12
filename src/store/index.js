@@ -5,6 +5,7 @@ import createLogger from '../../node_modules/vuex/dist/logger'
 import * as types from './mutation-types'
 import persistedState from 'vuex-persistedstate'
 import { KngSerializer } from 'kng-engine'
+import Vga from 'vue-analytics'
 
 Vue.use(Vuex)
 
@@ -232,6 +233,7 @@ export default new Vuex.Store({
       } catch (exception) {
         validPayload.validity = state.VALIDITY.ERROR
         validPayload.error = exception.message
+        Vue.$ga.event('validation-error', 'component', exception.message)
         commit(types.VALID_COMPONENT, validPayload)
       }
     },
@@ -250,6 +252,7 @@ export default new Vuex.Store({
       } catch (exception) {
         validPayload.validity = state.VALIDITY.ERROR
         validPayload.error = exception.message
+        Vue.$ga.event('validation-error', 'composition', exception.message)
         commit(types.VALID_COMPOSITION, validPayload)
         return
       }
@@ -270,6 +273,7 @@ export default new Vuex.Store({
       } catch (exception) {
         validPayload.validity = state.VALIDITY.ERROR
         validPayload.error = exception.message
+        Vue.$ga.event('validation-error', 'origin', exception.message)
         commit(types.VALID_ORIGIN, validPayload)
         return
       }
@@ -284,6 +288,7 @@ export default new Vuex.Store({
         kngEngine = getters.getKngEngine
         kngEngine.isValid()
       } catch (exception) {
+        Vue.$ga.event('validation-error', 'engine', exception.message)
         commit(types.SET_ERROR_ENGINE, exception.message)
         return
       }

@@ -183,6 +183,7 @@ export default {
       const compositionKey = (this.forcedComposition.key) ? this.forcedComposition.key : ''
       try {
         this.generatedName = this.generateNameFromComposition(compositionKey, originKey)
+        this.$ga.event('generate', 'single', this.generatedName.plain + ' (' + this.generatedName.origin + ')')
       } catch (exception) {
         this.generatedName = ''
         this.generatedError = exception.message
@@ -207,9 +208,28 @@ export default {
       if (errorCount) {
         this.generatedError = errorCount + ' errors. Last one is: ' + this.generatedError
       }
+      this.$ga.event('generate', 'multiple', this.generatedNameMultiple.join(';'))
       this.generatedName = ''
     },
     exportEngine () {
+      const exportEngine = JSON.parse(this.getEngineExport)
+      for (let componentName in exportEngine.components) {
+        if (exportEngine.components.hasOwnProperty(componentName)) {
+          this.$ga.event('export', 'componentType', exportEngine.components[componentName].type)
+        }
+      }
+      let origins = []
+      for (let originName in exportEngine.origins) {
+        if (exportEngine.origins.hasOwnProperty(originName)) {
+          origins.push(originName)
+        }
+      }
+      this.$ga.event('export', 'valid',
+        '[' + origins.join(';') + ']' +
+        ' ' + Object.keys(exportEngine.origins).length + ' origins' +
+        ' ' + Object.keys(exportEngine.compositions).length + ' compositions' +
+        ' ' + Object.keys(exportEngine.components).length + ' components'
+      )
       this.$refs.modalExportEngine.open()
     },
     onClipboardSuccess () {
