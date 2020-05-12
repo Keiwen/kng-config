@@ -5,7 +5,6 @@ import createLogger from '../../node_modules/vuex/dist/logger'
 import * as types from './mutation-types'
 import persistedState from 'vuex-persistedstate'
 import { KngSerializer } from 'kng-engine'
-import Vga from 'vue-analytics'
 
 Vue.use(Vuex)
 
