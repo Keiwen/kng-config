@@ -131,21 +131,25 @@ export default {
         }
       }
     },
-    pickEditor (itemKey) {
+    pickEditor (itemKey, copy) {
       // enter in switch process
       this.switchItem = true
       if (typeof this.items[itemKey] === 'undefined') {
         let item = null
-        switch (this.category) {
-          case 'components':
-            item = this.defaultComponent
-            break
-          case 'compositions':
-            item = this.defaultComposition
-            break
-          case 'origins':
-            item = this.defaultOrigin
-            break
+        if (copy) {
+          item = this.pickedItem
+        } else {
+          switch (this.category) {
+            case 'components':
+              item = this.defaultComponent
+              break
+            case 'compositions':
+              item = this.defaultComposition
+              break
+            case 'origins':
+              item = this.defaultOrigin
+              break
+          }
         }
         if (item !== null) {
           // clone default item to manipulate it, or it will change state directly

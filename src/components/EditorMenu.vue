@@ -30,6 +30,11 @@
               <icon name="exclamation-triangle"></icon>
               Key cannot be empty and must not contain space or special characters.
           </b-alert>
+
+          <b-form-checkbox v-model="newItemCopy" id="newItemCopy" ref="newItemCopyInput" @input="newItemCopyCheck()">As copy of {{ pickedKey }}</b-form-checkbox>
+
+          <br/>
+
           <b-form-group id="newNameGroup" horizontal :label-cols="3" breakpoint="sm"
                         label="Name" label-for="newItemKey">
               <b-form-input v-model="newItemKey" id="newItemKey" type="text" ref="newItemKeyInput"
@@ -59,6 +64,7 @@ export default {
     return {
       editorFilter: '',
       newItemKey: '',
+      newItemCopy: false,
       pickedKey: '',
       newKeyInvalid: false
     }
@@ -92,8 +98,9 @@ export default {
     confirmNewEditor () {
       if (this.newItemKey.match(/^\w+$/)) {
         this.$refs.modalNewEditor.close()
-        this.pickEditor(this.newItemKey)
+        this.pickEditor(this.newItemKey, this.newItemCopy)
         this.newItemKey = ''
+        this.newItemCopy = false
         this.newKeyInvalid = false
       } else {
         this.newKeyInvalid = true
@@ -101,6 +108,7 @@ export default {
     },
     cancelNewEditor () {
       this.newItemKey = ''
+      this.newItemCopy = false
       this.newKeyInvalid = false
       this.$refs.modalNewEditor.close()
     },
@@ -109,10 +117,15 @@ export default {
       // need to focus on input. Not fully mounted yet, so focus on next tick
       this.$nextTick(() => this.$refs.newItemKeyInput.focus())
     },
-    pickEditor (itemKey) {
+    pickEditor (itemKey, copy) {
       this.clearFilter()
       this.pickedKey = itemKey
-      this.$emit('edit-item', itemKey)
+      this.$emit('edit-item', itemKey, copy)
+    },
+    newItemCopyCheck () {
+      if (this.newItemCopy && this.newItemKey === '') {
+        this.newItemKey = this.pickedKey + '_copy'
+      }
     }
   }
 }
