@@ -280,7 +280,7 @@ export default {
   .nameMultiple {
     margin: 5px 0;
     cursor: pointer;
-    &:before {
+    &.hvr-underline-from-center:before {
       background-color: $main-color;
     }
   }
