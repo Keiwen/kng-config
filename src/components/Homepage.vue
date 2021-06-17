@@ -53,14 +53,11 @@
 
             <div v-if="generatedName">
               <h3>{{ generatedName.plain }}</h3>
-              <strong>Origin:</strong> {{ generatedName.origin }}
-              <br/>
-              <strong>Composition:</strong> {{ generatedName.composition }}
-              <b-table bordered small responsive hover :items="generatedNameSplitTable"></b-table>
+              <name-detail :generatedName="generatedName"></name-detail>
             </div>
             <div v-if="generatedNameMultiple">
-              <div v-for="(plainName, index) in generatedNameMultiple" :key="index">
-                {{ plainName }}<br/>
+              <div v-for="(generatedName, index) in generatedNameMultiple" :key="index">
+                <div class="nameMultiple hvr-underline-from-center" @click="openNameDetail(generatedName)">{{ generatedName.plain }}</div>
               </div>
             </div>
             <b-alert show variant="danger" v-if="generatedError">
@@ -90,6 +87,10 @@
 
       </sweet-modal>
 
+      <sweet-modal ref="modalNameDetail" modal-theme="dark" :title="nameDetailPlain" id="modalNameDetail" v-if="generatedNameMultiple">
+        <name-detail :generatedName="nameDetail"></name-detail>
+      </sweet-modal>
+
     </div>
 
   </div>
@@ -99,10 +100,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import VSelect from 'vue-select'
 import { SweetModal } from 'sweet-modal-vue'
+import NameDetail from './NameDetail'
 
 export default {
   name: 'Homepage',
-  components: { VSelect, SweetModal },
+  components: { VSelect, SweetModal, NameDetail },
   data () {
     return {
       generatedName: null,
@@ -110,6 +112,8 @@ export default {
       generatedError: '',
       forcedOrigin: { key: '', weight: 0, title: '[All origins]', compositions: [] },
       forcedComposition: { key: '', weight: 0, title: '[All compositions]' },
+      nameDetail: null,
+      nameDetailPlain: '',
       copiedClipboard: false
     }
   },
@@ -198,8 +202,8 @@ export default {
       let errorCount = 0
       for (let i = 0; i < 10; i++) {
         try {
-          const plainName = this.generateNameFromComposition(compositionKey, originKey, true)
-          this.generatedNameMultiple.push(plainName)
+          const generatedName = this.generateNameFromComposition(compositionKey, originKey, false)
+          this.generatedNameMultiple.push(generatedName)
         } catch (exception) {
           errorCount++
           this.generatedError = exception.message
@@ -234,6 +238,11 @@ export default {
     },
     onClipboardSuccess () {
       this.copiedClipboard = true
+    },
+    openNameDetail (generatedName) {
+      this.nameDetail = generatedName
+      this.nameDetailPlain = generatedName.plain
+      this.$refs.modalNameDetail.open()
     }
   }
 }
@@ -267,4 +276,13 @@ export default {
   .exportButton {
     margin-top: 0.5rem;
   }
+
+  .nameMultiple {
+    margin: 5px 0;
+    cursor: pointer;
+    &:before {
+      background-color: $main-color;
+    }
+  }
+
 </style>
