@@ -118,7 +118,7 @@
                     <b-alert show variant="warning">
                       <icon name="exclamation-triangle"></icon>
                       Parameter 'pattern' is required. If multiple values provided,
-                      a random one will be picked before generation.
+                      a random one will be picked before generation. Possible separators are ',', ';', or '/'.
                     </b-alert>
                     <b-alert show variant="warning">
                       <icon name="exclamation-triangle"></icon>
