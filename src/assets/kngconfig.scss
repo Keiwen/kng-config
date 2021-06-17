@@ -32,9 +32,9 @@ h2 {
 }
 
 table.table {
-  color: $text-light;
+  color: inherit;
   tr:hover {
-    color: $text-light;
+    color: inherit;
   }
 }
 
